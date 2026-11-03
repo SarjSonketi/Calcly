@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calcly</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%235b8cff'/%3E%3Cpath d='M7 12h10M12 7v10' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#16181d;--sf:#1f2229;--key:#292d37;--op:#343a48;--ac:#5b8cff;--at:#fff;--tx:#eef0f4;--mut:#8b92a1;--bd:#2d323d;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[data-theme=midnight]{--bg:#0c1222;--sf:#121a30;--key:#1a2442;--op:#25345f;--ac:#38bdf8;--at:#06202e;--tx:#e6eefc;--mut:#7a8bb0;--bd:#1f2b4d}
+[data-theme=forest]{--bg:#0e1612;--sf:#142019;--key:#1b2c22;--op:#25402f;--ac:#34d399;--at:#04210f;--tx:#e5f4ec;--mut:#7fa08d;--bd:#203529}
+[data-theme=plum]{--bg:#17101f;--sf:#1f1629;--key:#2a1e38;--op:#3b2a4f;--ac:#c084fc;--at:#240a3a;--tx:#f1e9fa;--mut:#a08ab8;--bd:#32244a}
+[data-theme=amoled]{--bg:#000;--sf:#0a0a0a;--key:#151515;--op:#212121;--ac:#f59e0b;--at:#1c1100;--tx:#f5f5f5;--mut:#808080;--bd:#222}
+[data-theme=light]{--bg:#f1f3f8;--sf:#e6e9f1;--key:#fff;--op:#dfe4ef;--ac:#2563eb;--at:#fff;--tx:#171a21;--mut:#6b7385;--bd:#d3d8e4;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--tx);font:500 18px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;user-select:none;overscroll-behavior:none}
+#app{height:100%;max-width:460px;margin:0 auto;display:flex;flex-direction:column;position:relative}
+.top{display:flex;justify-content:flex-end;gap:8px;padding:10px 12px}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation}
+.ib{width:42px;height:42px;border-radius:12px;background:var(--sf);display:grid;place-items:center}
+.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.disp{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;padding:8px 22px 16px;text-align:right;overflow:hidden;word-break:break-all}
+#ex{font-weight:600;line-height:1.15}
+#rs{color:var(--mut);min-height:1.5em;margin-top:6px;font-size:22px}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 12px 16px;background:var(--sf);border-radius:26px 26px 0 0}
+.pad button{height:clamp(52px,9.4vh,72px);border-radius:18px;background:var(--key);font-size:25px;display:grid;place-items:center;transition:transform .08s,filter .1s}
+.pad button:active{transform:scale(.95);filter:brightness(1.25)}
+.pad .o{background:var(--op);color:var(--ac)}
+.pad .a{background:var(--ac);color:var(--at)}
+.pad .i{width:26px;height:26px;stroke-width:2.4}
+.pn{display:none;position:absolute;top:58px;right:12px;width:min(310px,calc(100% - 24px));max-height:70%;overflow:auto;background:var(--sf);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:0 14px 40px rgba(0,0,0,.35);z-index:5}
+.pn.o{display:block}
+.pn h3{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.pn h3:not(:first-child){margin-top:16px}
+select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--key);color:var(--tx);font:inherit;font-size:16px}
+.sw{display:flex;gap:10px;flex-wrap:wrap}
+.sw button{width:38px;height:38px;border-radius:50%;border:2px solid var(--bd)}
+.sw button.s{outline:2px solid var(--ac);outline-offset:2px}
+.hi{display:block;width:100%;text-align:right;background:var(--key);border-radius:12px;padding:9px 12px;margin-bottom:6px;word-break:break-all}
+.hi small{display:block;color:var(--mut);font-size:13px}
+.hi b{font-size:19px;font-weight:600}
+.em{color:var(--mut);text-align:center;padding:14px 0;font-size:15px}
+.cl{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:6px;padding:10px;border-radius:12px;background:var(--op);color:var(--tx);font-size:15px}
+.cl .i{width:18px;height:18px}
+[data-theme=slate]{--bg:#11151a;--sf:#181e26;--key:#202833;--op:#2b3544;--ac:#7aa2c8;--at:#0b1a27;--tx:#e8edf3;--mut:#8794a5;--bd:#252e3a}
+[data-theme=teal]{--bg:#0a1517;--sf:#102022;--key:#162b2e;--op:#1f3c40;--ac:#4fb3b0;--at:#04201f;--tx:#e3f3f2;--mut:#78a09e;--bd:#1b3336}
+[data-theme=wine]{--bg:#180e12;--sf:#22141a;--key:#2d1b23;--op:#402632;--ac:#d4687f;--at:#2a0714;--tx:#f4e8ec;--mut:#a88892;--bd:#36212b}
+[data-theme=mocha]{--bg:#16120f;--sf:#1f1a16;--key:#2a231d;--op:#3b3128;--ac:#c8a26b;--at:#231606;--tx:#f1ebe3;--mut:#9d9184;--bd:#332b24}
+.fl{width:26px;height:18px;border-radius:3px;flex:none;box-shadow:0 0 0 1px rgba(128,128,128,.4)}
+.lb{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--key);text-align:left;font-size:16px}
+.lb span,#ll span{flex:1}
+#ll{display:none;max-height:210px;overflow:auto;margin-top:6px;border:1px solid var(--bd);border-radius:10px;background:var(--key)}
+#ll.o{display:block}
+#ll button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;background:none;text-align:left;font-size:15px}
+#ll button.s{background:var(--op)}
+.pn h2{margin:0 0 12px;font-size:18px}
+#tt{position:absolute;left:50%;top:60px;transform:translate(-50%,-8px);max-width:calc(100% - 32px);padding:9px 14px;border-radius:12px;background:var(--ac);color:var(--at);font-size:14px;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:9}
+#tt.o{opacity:1;transform:translate(-50%,0)}
+body,.pad,.pn,.ib,.cl,.hi,.lb,#ll{transition:background-color .3s,color .3s,border-color .3s}
+.pad button{transition:transform .08s,filter .1s,background-color .3s,color .3s;animation:ki .35s ease-out backwards}
+.ib .i{transition:transform .25s}.ib:active .i{transform:rotate(40deg) scale(.9)}
+.sw button{transition:transform .15s}.sw button:active{transform:scale(.85)}
+.pn.o,#ll.o{animation:pp .18s ease-out}
+.hi{animation:sl .22s ease-out backwards}
+.pz{animation:pz .25s ease-out}
+.sk{animation:shk .3s}
+@keyframes pp{from{opacity:0;transform:translateY(-8px) scale(.97)}}
+@keyframes ki{from{opacity:0;transform:translateY(14px) scale(.9)}}
+@keyframes sl{from{opacity:0;transform:translateX(14px)}}
+@keyframes pz{from{opacity:.4;transform:scale(1.08)}}
+@keyframes shk{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:16px;font-size:16px}
+.tg{width:46px;height:26px;border-radius:13px;background:var(--op);position:relative;transition:background .2s}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--tx);transition:transform .2s,background .2s}
+.tg[aria-checked=true]{background:var(--ac)}
+.tg[aria-checked=true]::after{transform:translateX(20px);background:var(--at)}
+#mb{margin-top:16px}
+.hd{display:flex;align-items:center;gap:8px;margin-bottom:12px}.hd h2{margin:0}
+.bb{width:34px;height:34px;border-radius:10px;background:var(--key);display:grid;place-items:center}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;padding:10px 4px;border-radius:10px;background:var(--key);border:1px solid var(--bd);font-size:14px}
+.seg button.s{background:var(--ac);color:var(--at);border-color:transparent}
+.cr{display:flex;gap:10px}.cr label{flex:1;display:flex;align-items:center;gap:6px}
+input[type=color]{width:100%;height:42px;border:1px solid var(--bd);border-radius:10px;background:var(--key);padding:3px;cursor:pointer}
+.sc{display:none}
+#app.sci .sc{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:12px 12px 0;background:var(--sf);border-radius:26px 26px 0 0;animation:pp .2s ease-out}
+#app.sci .pad{border-radius:0;padding-top:10px}
+#app.sci .pad button{height:clamp(44px,7.4vh,60px);font-size:22px}
+.sc button{height:clamp(34px,5.4vh,44px);border-radius:12px;background:var(--key);color:var(--ac);font-size:15px;transition:transform .08s,filter .1s}
+.sc button:active{transform:scale(.94);filter:brightness(1.25)}
+.ic{width:42px;height:42px;border-radius:12px;background:var(--sf);display:grid;place-items:center}
+.ic[hidden]{display:none}
+.ic:disabled{opacity:.35}.ic:disabled:active{transform:none}
+#ab{margin-top:18px}
+.mr{display:flex;gap:8px}.mr .ml{flex:1;display:flex;align-items:center}.mr .ic{flex:none;background:var(--key)}
+.pn{background:var(--sf);background:color-mix(in srgb,var(--sf) 30%,transparent);-webkit-backdrop-filter:blur(28px) saturate(1.6);backdrop-filter:blur(28px) saturate(1.6);border:1px solid var(--bd);border:1px solid color-mix(in srgb,var(--tx) 18%,transparent);box-shadow:0 18px 50px rgba(0,0,0,.35),inset 0 1px 0 color-mix(in srgb,var(--tx) 10%,transparent)}
+.pn .hi,.pn .lb,#ll,.pn .bb,.pn .ic,.mr .ml{background:color-mix(in srgb,var(--key) 30%,transparent)}
+.pn .cl{background:color-mix(in srgb,var(--op) 30%,transparent)}
+.pn .seg button:not(.s){background:color-mix(in srgb,var(--key) 30%,transparent)}
+.cw{display:flex;gap:12px;align-items:center}
+.lg{width:38px;height:38px;flex:none}
+.ap{margin:0 0 4px;line-height:1.5;font-size:15px}
+.ml{display:block;padding:12px;border-radius:10px;background:var(--key);color:var(--ac);text-decoration:none;word-break:break-all;font-size:16px;user-select:text;-webkit-user-select:text}
+.ic:active{transform:scale(.92)}
+.seg{flex-wrap:wrap}.seg button:last-child{flex-basis:100%}
+#sgg button,#sgd button{flex-basis:auto!important}
+[data-theme=graphite]{--bg:#141517;--sf:#1c1e21;--key:#25282c;--op:#30343a;--ac:#9aa7b4;--at:#0d1013;--tx:#eceef0;--mut:#868d96;--bd:#2a2d32}
+[data-theme=obsidian]{--bg:#0a0a0b;--sf:#111113;--key:#1a1a1d;--op:#242428;--ac:#fafafa;--at:#0a0a0b;--tx:#f4f4f5;--mut:#78787f;--bd:#1f1f23}
+[data-theme=charcoal]{--bg:#1a1917;--sf:#222120;--key:#2c2a28;--op:#383532;--ac:#d8d2c4;--at:#1a1814;--tx:#f1efea;--mut:#928d84;--bd:#312f2c}
+[data-theme=pewter]{--bg:#1d2127;--sf:#252a31;--key:#2f353d;--op:#3b424c;--ac:#cbd5e1;--at:#151a20;--tx:#f1f4f8;--mut:#8e98a6;--bd:#333a44}
+[data-theme=navy]{--bg:#0a1330;--sf:#101a40;--key:#17235a;--op:#212f72;--ac:#e0b84f;--at:#1a1300;--tx:#e9eefb;--mut:#7f8cb8;--bd:#1c2956}
+[data-theme=ink]{--bg:#080d1a;--sf:#0e1526;--key:#151e36;--op:#1f2a4a;--ac:#c7d2fe;--at:#0a0f2a;--tx:#e8ecfa;--mut:#7782a6;--bd:#1a233e}
+[data-theme=indigo]{--bg:#0f1026;--sf:#161835;--key:#1f2245;--op:#2c3060;--ac:#818cf8;--at:#0c0d2a;--tx:#eceefe;--mut:#8a8eb8;--bd:#25284e}
+[data-theme=lilac]{--bg:#15141b;--sf:#1c1b24;--key:#25232f;--op:#322f40;--ac:#b4a7d6;--at:#1a1530;--tx:#efecf6;--mut:#8f8aa3;--bd:#2b2937}
+[data-theme=royal]{--bg:#0c0818;--sf:#140f26;--key:#1d1636;--op:#2a2150;--ac:#8b5cf6;--at:#ffffff;--tx:#efe9fb;--mut:#8b7fae;--bd:#251c40}
+[data-theme=gold]{--bg:#0d0c08;--sf:#151410;--key:#1e1c15;--op:#2b281c;--ac:#facc15;--at:#1a1400;--tx:#f6f3e8;--mut:#9a9580;--bd:#26231a}
+.vr{margin:16px 0 0;text-align:center;color:var(--mut);font-size:13px}
+#tb{margin-top:16px}
+@keyframes pnin{from{opacity:0;transform:translateY(-12px) scale(.9)}}
+@keyframes it{from{opacity:0;transform:translateY(8px)}}
+@keyframes vin{from{opacity:0;transform:translateX(18px)}}
+@keyframes sp{from{opacity:0;transform:scale(.4)}}
+.pn.o{animation:pnin .26s cubic-bezier(.2,.9,.25,1.12);transform-origin:calc(100% - 22px) 0}
+#v1>*,#hp>*{animation:it .3s cubic-bezier(.2,.8,.2,1) backwards}
+#v1>:nth-child(1){animation-delay:28ms}#v1>:nth-child(2){animation-delay:56ms}#v1>:nth-child(3){animation-delay:84ms}#v1>:nth-child(4){animation-delay:112ms}#v1>:nth-child(5){animation-delay:140ms}#v1>:nth-child(6){animation-delay:168ms}#v1>:nth-child(7){animation-delay:196ms}
+#hp>:nth-child(2){animation-delay:30ms}#hp>:nth-child(3){animation-delay:60ms}
+#v2:not([hidden]),#v3:not([hidden]),#v4:not([hidden]){animation:vin .24s cubic-bezier(.2,.8,.2,1)}
+.sw button{animation:sp .32s cubic-bezier(.2,.9,.3,1.3) backwards}
+#ll.o{animation:pnin .2s cubic-bezier(.2,.9,.25,1.05);transform-origin:top}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+<symbol id="mul" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="div" viewBox="0 0 24 24"><path d="M5 12h14"/><circle cx="12" cy="6" r="1.3" fill="currentColor"/><circle cx="12" cy="18" r="1.3" fill="currentColor"/></symbol>
+<symbol id="eq" viewBox="0 0 24 24"><path d="M5 9h14M5 15h14"/></symbol>
+<symbol id="bk" viewBox="0 0 24 24"><path d="M21 5H9l-6 7 6 7h12z"/><path d="M16 9.5l-5 5M11 9.5l5 5"/></symbol>
+<symbol id="hist" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2"/></symbol>
+<symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol>
+<symbol id="undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+<symbol id="copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+<symbol id="trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+</defs></svg>
+
+<div id="app">
+  <div class="top">
+    <button class="ic" id="ub" disabled data-a="19" aria-label="Undo"><svg class="i"><use href="#undo"/></svg></button>
+    <button class="ic" id="cpb" hidden data-a="11" aria-label="Copy"><svg class="i"><use href="#copy"/></svg></button>
+    <button class="ib" data-p="#hp" data-a="4" aria-label="History"><svg class="i"><use href="#hist"/></svg></button>
+    <button class="ib" data-p="#sp" data-a="1" aria-label="Settings"><svg class="i"><use href="#gear"/></svg></button>
+  </div>
+  <div class="pn" id="sp">
+    <div id="v1"><h2 data-i="1"></h2><h3 data-i="2"></h3><button class="lb" id="lb"></button><div id="ll"></div>
+    <div class="row"><span data-i="10"></span><button class="tg" id="tg" role="switch" aria-checked="false" aria-label="Scientific"></button></div>
+    <button class="cl" id="tb"><span data-i="3"></span><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="cl" id="mb"><span data-i="9"></span><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
+    <div id="v2" hidden>
+      <div class="hd"><button class="bb" id="bkb" data-a="1" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><h2 data-i="9"></h2></div>
+      <h3 data-i="11"></h3><div class="seg" id="sg"><button data-v="0" data-i="12"></button><button data-v="1" data-i="13"></button><button data-v="2" data-i="16"></button></div>
+      
+      
+      
+      <button class="cl" id="ab"><span data-i="20"></span><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <div id="v3" hidden>
+      <div class="hd"><button class="bb" id="bk3" data-a="1" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><h2 data-i="20"></h2></div>
+      <div class="cw"><svg class="lg" viewBox="0 0 24 24" fill="none" stroke="#d97757" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 12L22 12M14.6 13.5L19.36 16.25M13.5 14.6L17 20.66M12 15L12 20.5M10.5 14.6L7 20.66M9.4 13.5L4.64 16.25M9 12L2 12M9.4 10.5L4.64 7.75M10.5 9.4L7 3.34M12 9L12 3.5M13.5 9.4L17 3.34M14.6 10.5L19.36 7.75"/></svg><p class="ap" data-i="21"></p></div>
+      <h3 data-i="22"></h3><div class="mr"><a class="ml" href="mailto:ibm.sm97@gmail.com" target="_blank" rel="noopener">ibm.sm97@gmail.com</a><button class="ic" id="mc" aria-label="ibm.sm97@gmail.com"><svg class="i"><use href="#copy"/></svg></button></div>
+      <p class="vr">Calcly 1.0.0</p>
+    </div>
+    <div id="v4" hidden>
+      <div class="hd"><button class="bb" id="bk4" data-a="1" aria-label="Settings"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><h2 data-i="3"></h2></div>
+      <div class="sw" id="sw"></div>
+    </div>
+  </div>
+  <div class="pn" id="hp">
+    <h3 data-i="4"></h3><div id="hl"></div>
+    <button class="cl" id="hc"><svg class="i"><use href="#trash"/></svg><span data-i="6"></span></button>
+  </div>
+  <div id="tt" role="status"></div>
+  <div class="disp"><div id="ex">0</div><div id="rs"></div></div>
+  <div class="sc" id="sc"></div>
+  <div class="pad" id="pad">
+    <button data-k="AC" class="o">AC</button>
+    <button data-k="()" class="o">( )</button>
+    <button data-k="%" class="o">%</button>
+    <button data-k="÷" class="o" aria-label="÷"><svg class="i"><use href="#div"/></svg></button>
+    <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+    <button data-k="×" class="o" aria-label="×"><svg class="i"><use href="#mul"/></svg></button>
+    <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+    <button data-k="−" class="o" aria-label="−"><svg class="i"><use href="#minus"/></svg></button>
+    <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+    <button data-k="+" class="o" aria-label="+"><svg class="i"><use href="#plus"/></svg></button>
+    <button data-k="DEL" class="o" aria-label="Backspace"><svg class="i"><use href="#bk"/></svg></button>
+    <button data-k="0">0</button><button data-k=".">.</button>
+    <button data-k="=" class="a" aria-label="="><svg class="i"><use href="#eq"/></svg></button>
+  </div>
+</div>
+
+<script>
+// [native name, settings, language, theme, history, empty, clear history, error]
+const L={
+tr:["Türkçe","Ayarlar","Dil","Tema","Geçmiş","Geçmiş boş","Geçmişi temizle","Hata"],
+en:["English","Settings","Language","Theme","History","No history yet","Clear history","Error"],
+de:["Deutsch","Einstellungen","Sprache","Design","Verlauf","Kein Verlauf","Verlauf löschen","Fehler"],
+fr:["Français","Paramètres","Langue","Thème","Historique","Aucun historique","Effacer l’historique","Erreur"],
+es:["Español","Ajustes","Idioma","Tema","Historial","Sin historial","Borrar historial","Error"],
+it:["Italiano","Impostazioni","Lingua","Tema","Cronologia","Nessuna cronologia","Cancella cronologia","Errore"],
+pt:["Português","Configurações","Idioma","Tema","Histórico","Sem histórico","Limpar histórico","Erro"],
+ru:["Русский","Настройки","Язык","Тема","История","История пуста","Очистить историю","Ошибка"],
+uk:["Українська","Налаштування","Мова","Тема","Історія","Історія порожня","Очистити історію","Помилка"],
+pl:["Polski","Ustawienia","Język","Motyw","Historia","Brak historii","Wyczyść historię","Błąd"],
+nl:["Nederlands","Instellingen","Taal","Thema","Geschiedenis","Geen geschiedenis","Geschiedenis wissen","Fout"],
+sv:["Svenska","Inställningar","Språk","Tema","Historik","Ingen historik","Rensa historik","Fel"],
+nb:["Norsk","Innstillinger","Språk","Tema","Historikk","Ingen historikk","Slett historikk","Feil"],
+da:["Dansk","Indstillinger","Sprog","Tema","Historik","Ingen historik","Ryd historik","Fejl"],
+fi:["Suomi","Asetukset","Kieli","Teema","Historia","Ei historiaa","Tyhjennä historia","Virhe"],
+cs:["Čeština","Nastavení","Jazyk","Motiv","Historie","Žádná historie","Smazat historii","Chyba"],
+sk:["Slovenčina","Nastavenia","Jazyk","Motív","História","Žiadna história","Vymazať históriu","Chyba"],
+hu:["Magyar","Beállítások","Nyelv","Téma","Előzmények","Nincs előzmény","Előzmények törlése","Hiba"],
+ro:["Română","Setări","Limbă","Temă","Istoric","Fără istoric","Șterge istoricul","Eroare"],
+bg:["Български","Настройки","Език","Тема","История","Няма история","Изчисти историята","Грешка"],
+el:["Ελληνικά","Ρυθμίσεις","Γλώσσα","Θέμα","Ιστορικό","Κανένα ιστορικό","Εκκαθάριση ιστορικού","Σφάλμα"],
+hr:["Hrvatski","Postavke","Jezik","Tema","Povijest","Nema povijesti","Očisti povijest","Greška"],
+sr:["Srpski","Podešavanja","Jezik","Tema","Istorija","Nema istorije","Obriši istoriju","Greška"],
+ja:["日本語","設定","言語","テーマ","履歴","履歴なし","履歴を消去","エラー"],
+ko:["한국어","설정","언어","테마","기록","기록 없음","기록 지우기","오류"],
+zh:["中文","设置","语言","主题","历史记录","暂无记录","清除历史","错误"],
+hi:["हिन्दी","सेटिंग्स","भाषा","थीम","इतिहास","कोई इतिहास नहीं","इतिहास साफ़ करें","त्रुटि"],
+th:["ไทย","การตั้งค่า","ภาษา","ธีม","ประวัติ","ไม่มีประวัติ","ล้างประวัติ","ข้อผิดพลาด"],
+vi:["Tiếng Việt","Cài đặt","Ngôn ngữ","Giao diện","Lịch sử","Chưa có lịch sử","Xóa lịch sử","Lỗi"],
+id:["Indonesia","Pengaturan","Bahasa","Tema","Riwayat","Belum ada riwayat","Hapus riwayat","Kesalahan"]
+};
+const TH=[["dark","#16181d","#5b8cff"],["midnight","#0c1222","#38bdf8"],["forest","#0e1612","#34d399"],["plum","#17101f","#c084fc"],["amoled","#000","#f59e0b"],["slate","#11151a","#7aa2c8"],["teal","#0a1517","#4fb3b0"],["wine","#180e12","#d4687f"],["mocha","#16120f","#c8a26b"],["graphite","#141517","#9aa7b4"],["obsidian","#0a0a0b","#fafafa"],["charcoal","#1a1917","#d8d2c4"],["pewter","#1d2127","#cbd5e1"],["navy","#0a1330","#e0b84f"],["ink","#080d1a","#c7d2fe"],["indigo","#0f1026","#818cf8"],["lilac","#15141b","#b4a7d6"],["royal","#0c0818","#8b5cf6"],["gold","#0d0c08","#facc15"],["light","#f1f3f8","#2563eb"]];
+L.la=["Latina","Optiones","Lingua","Thema","Historia","Nulla historia","Historiam purgare","Error"];
+// index 8: character limit warning
+const W={
+tr:"Maksimum karakter sınırına ulaşıldı (50)",en:"Maximum character limit reached (50)",de:"Maximale Zeichenanzahl erreicht (50)",fr:"Limite de caractères atteinte (50)",es:"Límite máximo de caracteres alcanzado (50)",it:"Limite massimo di caratteri raggiunto (50)",pt:"Limite máximo de caracteres atingido (50)",ru:"Достигнут лимит символов (50)",uk:"Досягнуто ліміт символів (50)",pl:"Osiągnięto limit znaków (50)",
+nl:"Maximaal aantal tekens bereikt (50)",sv:"Maxgränsen för tecken nåddes (50)",nb:"Maksimal tegngrense nådd (50)",da:"Maksimal tegngrænse nået (50)",fi:"Merkkiraja saavutettu (50)",cs:"Dosažen maximální počet znaků (50)",sk:"Dosiahnutý maximálny počet znakov (50)",hu:"Elérted a karakterkorlátot (50)",ro:"Limita maximă de caractere atinsă (50)",bg:"Достигнат е лимитът на символите (50)",
+el:"Συμπληρώθηκε το όριο χαρακτήρων (50)",hr:"Dosegnut je maksimalni broj znakova (50)",sr:"Dostignut je maksimalan broj znakova (50)",ja:"最大文字数（50）に達しました",ko:"최대 글자 수(50)에 도달했습니다",zh:"已达到字符上限（50）",hi:"अधिकतम वर्ण सीमा (50) पूरी हो गई",th:"ถึงขีดจำกัดอักขระสูงสุดแล้ว (50)",vi:"Đã đạt giới hạn ký tự tối đa (50)",id:"Batas maksimum karakter tercapai (50)",la:"Maximus numerus litterarum attactus est (50)"};
+// flags (inline SVG, 30x20)
+const H=(...c)=>c.map((x,i)=>`<rect y="${(i*20/c.length).toFixed(2)}" width="30" height="${(20/c.length+.05).toFixed(2)}" fill="${x}"/>`).join("");
+const Vs=(...c)=>c.map((x,i)=>`<rect x="${(i*30/c.length).toFixed(2)}" width="${(30/c.length+.05).toFixed(2)}" height="20" fill="${x}"/>`).join("");
+const B=(x,y,w,h,f)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${f}"/>`;
+const S=(x,y,r,f)=>{let p="";for(let i=0;i<10;i++){const a=Math.PI*i/5-Math.PI/2,d=i%2?r*.4:r;p+=(x+d*Math.cos(a)).toFixed(1)+","+(y+d*Math.sin(a)).toFixed(1)+" "}return `<polygon points="${p}" fill="${f}"/>`};
+const FL={
+tr:B(0,0,30,20,"#e30a17")+`<circle cx="11" cy="10" r="5" fill="#fff"/><circle cx="12.4" cy="10" r="4" fill="#e30a17"/>`+S(16.5,10,2.4,"#fff"),
+en:`<rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#c8102e" stroke-width="1.5"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="6"/><path d="M15 0v20M0 10h30" stroke="#c8102e" stroke-width="3.5"/>`,
+de:H("#000","#dd0000","#ffce00"),fr:Vs("#0055a4","#fff","#ef4135"),
+es:B(0,0,30,20,"#aa151b")+B(0,5,30,10,"#f1bf00"),it:Vs("#009246","#fff","#ce2b37"),
+pt:B(0,0,12,20,"#006600")+B(12,0,18,20,"#f00")+`<circle cx="12" cy="10" r="3.2" fill="#ffe000"/>`,
+ru:H("#fff","#0039a6","#d52b1e"),uk:H("#0057b7","#ffd700"),pl:H("#fff","#dc143c"),nl:H("#ae1c28","#fff","#21468b"),
+sv:B(0,0,30,20,"#006aa7")+B(8,0,4,20,"#fecc00")+B(0,8,30,4,"#fecc00"),
+nb:B(0,0,30,20,"#ba0c2f")+B(7,0,5,20,"#fff")+B(0,7.5,30,5,"#fff")+B(8.5,0,2,20,"#00205b")+B(0,9,30,2,"#00205b"),
+da:B(0,0,30,20,"#c8102e")+B(9,0,3,20,"#fff")+B(0,8.5,30,3,"#fff"),
+fi:B(0,0,30,20,"#fff")+B(8,0,4,20,"#003580")+B(0,8,30,4,"#003580"),
+cs:H("#fff","#d7141a")+`<path d="M0 0l15 10L0 20z" fill="#11457e"/>`,
+sk:H("#fff","#0b4ea2","#ee1c25")+`<path d="M7 5h7v6q0 3-3.5 4Q7 14 7 11z" fill="#ee1c25" stroke="#fff" stroke-width=".7"/>`,
+hu:H("#ce2939","#fff","#477050"),ro:Vs("#002b7f","#fcd116","#ce1126"),bg:H("#fff","#00966e","#d62612"),
+el:B(0,0,30,20,"#0d5eaf")+[1,3,5,7].map(i=>B(0,(i*20/9).toFixed(2),30,(20/9).toFixed(2),"#fff")).join("")+B(0,0,11.1,11.1,"#0d5eaf")+B(4.45,0,2.2,11.1,"#fff")+B(0,4.45,11.1,2.2,"#fff"),
+hr:H("#f00","#fff","#171796")+`<rect x="12.5" y="6" width="5" height="6.5" fill="#fff" stroke="#f00" stroke-width=".8"/>`,
+sr:H("#c6363c","#0c4076","#fff"),
+ja:B(0,0,30,20,"#fff")+`<circle cx="15" cy="10" r="6" fill="#bc002d"/>`,
+ko:B(0,0,30,20,"#fff")+`<circle cx="15" cy="10" r="5" fill="#0047a0"/><path d="M10 10a5 5 0 0 1 10 0z" fill="#cd2e3a"/><path d="M4 4l3-2M5 5.4l3-2M23 2l3 2M22 3.4l3 2M4 16l3 2M5 14.6l3 2M23 18l3-2M22 16.6l3-2" stroke="#000" stroke-width="1"/>`,
+zh:B(0,0,30,20,"#de2910")+S(5,5,3.2,"#ffde00")+S(10,2,1,"#ffde00")+S(12,4,1,"#ffde00")+S(12,7,1,"#ffde00")+S(10,9,1,"#ffde00"),
+hi:H("#ff9933","#fff","#138808")+`<circle cx="15" cy="10" r="2.3" fill="none" stroke="#000080" stroke-width=".5"/>`,
+th:B(0,0,30,20,"#a51931")+B(0,3.33,30,13.34,"#f4f5f8")+B(0,6.67,30,6.66,"#2d2a4a"),
+vi:B(0,0,30,20,"#da251d")+S(15,10.5,6,"#ff0"),id:H("#e70011","#fff"),
+la:B(0,0,30,20,"#a4161a")+`<rect x="1.5" y="1.5" width="27" height="17" fill="none" stroke="#f2c230"/><text x="15" y="13" text-anchor="middle" font-size="7.5" font-weight="700" font-family="serif" fill="#f2c230">SPQR</text>`};
+// index 9-15: more settings, scientific, copy result, off, on, copied, custom theme
+const X={
+tr:["Ek ayarlar","Bilimsel mod","Sonucu kopyala","Kapalı","Açık","Kopyalandı","Özel tema"],
+en:["More settings","Scientific mode","Copy result","Off","On","Copied","Custom theme"],
+de:["Weitere Einstellungen","Wissenschaftlich","Ergebnis kopieren","Aus","An","Kopiert","Eigenes Design"],
+fr:["Plus de réglages","Mode scientifique","Copier le résultat","Désactivé","Activé","Copié","Thème perso"],
+es:["Más ajustes","Modo científico","Copiar resultado","No","Sí","Copiado","Tema propio"],
+it:["Altre impostazioni","Modalità scientifica","Copia risultato","No","Sì","Copiato","Tema personale"],
+pt:["Mais opções","Modo científico","Copiar resultado","Desligado","Ligado","Copiado","Tema próprio"],
+ru:["Доп. настройки","Научный режим","Копировать результат","Выкл.","Вкл.","Скопировано","Своя тема"],
+uk:["Додатково","Науковий режим","Копіювати результат","Вимк.","Увімк.","Скопійовано","Власна тема"],
+pl:["Więcej ustawień","Tryb naukowy","Kopiuj wynik","Wył.","Wł.","Skopiowano","Własny motyw"],
+nl:["Meer instellingen","Wetenschappelijk","Resultaat kopiëren","Uit","Aan","Gekopieerd","Eigen thema"],
+sv:["Fler inställningar","Vetenskapligt läge","Kopiera resultat","Av","På","Kopierat","Eget tema"],
+nb:["Flere innstillinger","Vitenskapelig modus","Kopier resultat","Av","På","Kopiert","Eget tema"],
+da:["Flere indstillinger","Videnskabelig tilstand","Kopiér resultat","Fra","Til","Kopieret","Eget tema"],
+fi:["Lisäasetukset","Tieteellinen tila","Kopioi tulos","Pois","Päällä","Kopioitu","Oma teema"],
+cs:["Další nastavení","Vědecký režim","Kopírovat výsledek","Vyp.","Zap.","Zkopírováno","Vlastní motiv"],
+sk:["Ďalšie nastavenia","Vedecký režim","Kopírovať výsledok","Vyp.","Zap.","Skopírované","Vlastný motív"],
+hu:["További beállítások","Tudományos mód","Eredmény másolása","Ki","Be","Másolva","Saját téma"],
+ro:["Mai multe setări","Mod științific","Copiază rezultatul","Oprit","Pornit","Copiat","Temă proprie"],
+bg:["Още настройки","Научен режим","Копиране на резултата","Изкл.","Вкл.","Копирано","Собствена тема"],
+el:["Περισσότερες ρυθμίσεις","Επιστημονική λειτουργία","Αντιγραφή αποτελέσματος","Όχι","Ναι","Αντιγράφηκε","Δικό μου θέμα"],
+hr:["Dodatne postavke","Znanstveni način","Kopiraj rezultat","Isklj.","Uklj.","Kopirano","Vlastita tema"],
+sr:["Dodatna podešavanja","Naučni režim","Kopiraj rezultat","Isklj.","Uklj.","Kopirano","Sopstvena tema"],
+ja:["追加設定","関数電卓モード","結果をコピー","オフ","オン","コピーしました","カスタムテーマ"],
+ko:["추가 설정","공학용 모드","결과 복사","끔","켬","복사됨","사용자 테마"],
+zh:["更多设置","科学模式","复制结果","关","开","已复制","自定义主题"],
+hi:["अधिक सेटिंग्स","वैज्ञानिक मोड","परिणाम कॉपी करें","बंद","चालू","कॉपी किया गया","कस्टम थीम"],
+th:["การตั้งค่าเพิ่มเติม","โหมดวิทยาศาสตร์","คัดลอกผลลัพธ์","ปิด","เปิด","คัดลอกแล้ว","ธีมกำหนดเอง"],
+vi:["Cài đặt khác","Chế độ khoa học","Sao chép kết quả","Tắt","Bật","Đã sao chép","Giao diện riêng"],
+id:["Pengaturan lain","Mode ilmiah","Salin hasil","Mati","Hidup","Tersalin","Tema kustom"],
+la:["Plures optiones","Modus scientificus","Exitum transcribere","Inactum","Actum","Transcriptum","Thema proprium"]};
+// index 16: copy with expression
+const Y={tr:"İşlem ile beraber kopyala",en:"Copy with expression",de:"Mit Rechnung kopieren",fr:"Copier avec l’opération",es:"Copiar con la operación",it:"Copia con l’operazione",pt:"Copiar com a operação",ru:"Копировать с выражением",uk:"Копіювати з виразом",pl:"Kopiuj z działaniem",nl:"Kopiëren met som",sv:"Kopiera med uträkning",nb:"Kopier med regnestykket",da:"Kopiér med regnestykket",fi:"Kopioi laskun kanssa",cs:"Kopírovat s příkladem",sk:"Kopírovať s príkladom",hu:"Másolás a művelettel",ro:"Copiază cu operația",bg:"Копиране с израза",el:"Αντιγραφή με την πράξη",hr:"Kopiraj s izrazom",sr:"Kopiraj sa izrazom",ja:"計算式と一緒にコピー",ko:"수식과 함께 복사",zh:"连同算式一起复制",hi:"गणना के साथ कॉपी करें",th:"คัดลอกพร้อมสมการ",vi:"Sao chép kèm phép tính",id:"Salin beserta operasi",la:"Cum operatione transcribere"};
+// index 17-19: digit grouping, decimal separator, undo
+const Z={tr:["Rakam gruplama","Ondalık ayırıcı","Geri al"],en:["Digit grouping","Decimal separator","Undo"],de:["Ziffern gruppieren","Dezimaltrennzeichen","Rückgängig"],fr:["Séparateur de milliers","Séparateur décimal","Annuler"],es:["Separador de miles","Separador decimal","Deshacer"],it:["Separatore migliaia","Separatore decimale","Annulla"],pt:["Separador de milhares","Separador decimal","Desfazer"],ru:["Разделение разрядов","Десятичный разделитель","Отменить"],uk:["Розділення розрядів","Десятковий роздільник","Скасувати"],pl:["Grupowanie cyfr","Separator dziesiętny","Cofnij"],nl:["Cijfergroepering","Decimaalteken","Ongedaan maken"],sv:["Siffergruppering","Decimaltecken","Ångra"],nb:["Sifergruppering","Desimaltegn","Angre"],da:["Cifergruppering","Decimaltegn","Fortryd"],fi:["Numeroiden ryhmittely","Desimaalierotin","Kumoa"],cs:["Seskupení číslic","Desetinný oddělovač","Zpět"],sk:["Zoskupenie číslic","Desatinný oddeľovač","Späť"],hu:["Számjegycsoportosítás","Tizedesjel","Visszavonás"],ro:["Grupare cifre","Separator zecimal","Anulează"],bg:["Групиране на цифри","Десетичен разделител","Отмяна"],el:["Ομαδοποίηση ψηφίων","Δεκαδικός διαχωριστής","Αναίρεση"],hr:["Grupiranje znamenki","Decimalni separator","Poništi"],sr:["Grupisanje cifara","Decimalni separator","Poništi"],ja:["桁区切り","小数点記号","元に戻す"],ko:["자릿수 구분","소수점 기호","실행 취소"],zh:["数字分组","小数点符号","撤销"],hi:["अंक समूहन","दशमलव चिह्न","पूर्ववत करें"],th:["การแบ่งหลัก","ตัวคั่นทศนิยม","เลิกทำ"],vi:["Phân tách hàng nghìn","Dấu thập phân","Hoàn tác"],id:["Pemisah ribuan","Pemisah desimal","Urungkan"],la:["Cifras dividere","Signum decimale","Revocare"]};
+// index 20-22: about, made-by text, contact
+const Q={tr:["Hakkında","Bu uygulama, Anthropic tarafından geliştirilen yapay zekâ asistanı Claude tarafından yapılmıştır.","İletişim"],en:["About","This app was made by Claude, an AI assistant developed by Anthropic.","Contact"],de:["Über","Diese App wurde von Claude erstellt, einem KI-Assistenten von Anthropic.","Kontakt"],fr:["À propos","Cette application a été créée par Claude, un assistant IA développé par Anthropic.","Contact"],es:["Acerca de","Esta aplicación fue creada por Claude, un asistente de IA desarrollado por Anthropic.","Contacto"],it:["Informazioni","Questa app è stata creata da Claude, un assistente IA sviluppato da Anthropic.","Contatto"],pt:["Sobre","Este aplicativo foi criado por Claude, um assistente de IA desenvolvido pela Anthropic.","Contato"],ru:["О приложении","Это приложение создано Claude — ИИ-ассистентом от Anthropic.","Контакт"],uk:["Про застосунок","Цей застосунок створив Claude — ШІ-асистент від Anthropic.","Контакт"],pl:["O aplikacji","Ta aplikacja została stworzona przez Claude’a, asystenta AI opracowanego przez Anthropic.","Kontakt"],nl:["Over","Deze app is gemaakt door Claude, een AI-assistent van Anthropic.","Contact"],sv:["Om","Den här appen skapades av Claude, en AI-assistent utvecklad av Anthropic.","Kontakt"],nb:["Om","Denne appen er laget av Claude, en KI-assistent utviklet av Anthropic.","Kontakt"],da:["Om","Denne app er lavet af Claude, en AI-assistent udviklet af Anthropic.","Kontakt"],fi:["Tietoja","Tämän sovelluksen on tehnyt Claude, Anthropicin kehittämä tekoälyavustaja.","Yhteystiedot"],cs:["O aplikaci","Tuto aplikaci vytvořil Claude, AI asistent vyvinutý společností Anthropic.","Kontakt"],sk:["O aplikácii","Túto aplikáciu vytvoril Claude, AI asistent vyvinutý spoločnosťou Anthropic.","Kontakt"],hu:["Névjegy","Ezt az alkalmazást Claude készítette, az Anthropic által fejlesztett MI-asszisztens.","Kapcsolat"],ro:["Despre","Această aplicație a fost creată de Claude, un asistent AI dezvoltat de Anthropic.","Contact"],bg:["Относно","Това приложение е създадено от Claude, ИИ асистент, разработен от Anthropic.","Контакт"],el:["Σχετικά","Αυτή η εφαρμογή δημιουργήθηκε από τον Claude, βοηθό τεχνητής νοημοσύνης της Anthropic.","Επικοινωνία"],hr:["O aplikaciji","Ovu aplikaciju izradio je Claude, AI asistent tvrtke Anthropic.","Kontakt"],sr:["O aplikaciji","Ovu aplikaciju je napravio Claude, AI asistent kompanije Anthropic.","Kontakt"],ja:["このアプリについて","このアプリは、Anthropic が開発した AI アシスタント Claude によって作成されました。","お問い合わせ"],ko:["앱 정보","이 앱은 Anthropic이 개발한 AI 어시스턴트 Claude가 만들었습니다.","문의"],zh:["关于","本应用由 Anthropic 开发的 AI 助手 Claude 制作。","联系方式"],hi:["परिचय","यह ऐप Anthropic द्वारा विकसित AI सहायक Claude ने बनाया है।","संपर्क"],th:["เกี่ยวกับ","แอปนี้สร้างโดย Claude ผู้ช่วย AI ที่พัฒนาโดย Anthropic","ติดต่อ"],vi:["Giới thiệu","Ứng dụng này do Claude, trợ lý AI của Anthropic, tạo ra.","Liên hệ"],id:["Tentang","Aplikasi ini dibuat oleh Claude, asisten AI yang dikembangkan oleh Anthropic.","Kontak"],la:["De applicatione","Hanc applicationem Claude, adiutor intellegentiae artificialis ab Anthropic evolutus, fecit.","Contactus"]};
+const Q2={tr:"Bu uygulama bağımsız bir kullanıcı tarafından Claude ile geliştirilmiştir.",en:"This app was developed by an independent user with Claude.",de:"Diese App wurde von einem unabhängigen Nutzer mit Claude entwickelt.",fr:"Cette application a été développée par un utilisateur indépendant avec Claude.",es:"Esta aplicación fue desarrollada por un usuario independiente con Claude.",it:"Questa app è stata sviluppata da un utente indipendente con Claude.",pt:"Este aplicativo foi desenvolvido por um usuário independente com o Claude.",ru:"Это приложение разработано независимым пользователем с помощью Claude.",uk:"Цей застосунок розроблено незалежним користувачем за допомогою Claude.",pl:"Ta aplikacja została stworzona przez niezależnego użytkownika z pomocą Claude’a.",nl:"Deze app is ontwikkeld door een onafhankelijke gebruiker met Claude.",sv:"Den här appen har utvecklats av en oberoende användare med Claude.",nb:"Denne appen er utviklet av en uavhengig bruker med Claude.",da:"Denne app er udviklet af en uafhængig bruger med Claude.",fi:"Tämän sovelluksen on kehittänyt riippumaton käyttäjä Clauden avulla.",cs:"Tuto aplikaci vyvinul nezávislý uživatel s pomocí Clauda.",sk:"Túto aplikáciu vyvinul nezávislý používateľ s pomocou Clauda.",hu:"Ezt az alkalmazást egy független felhasználó fejlesztette Claude segítségével.",ro:"Această aplicație a fost dezvoltată de un utilizator independent cu Claude.",bg:"Това приложение е разработено от независим потребител с помощта на Claude.",el:"Αυτή η εφαρμογή αναπτύχθηκε από έναν ανεξάρτητο χρήστη με τον Claude.",hr:"Ovu aplikaciju razvio je neovisni korisnik uz Claudea.",sr:"Ovu aplikaciju je razvio nezavisni korisnik uz Claudea.",ja:"このアプリは、独立したユーザーが Claude と共に開発しました。",ko:"이 앱은 독립 사용자가 Claude와 함께 개발했습니다.",zh:"本应用由一位独立用户借助 Claude 开发。",hi:"यह ऐप एक स्वतंत्र उपयोगकर्ता ने Claude के साथ मिलकर बनाया है।",th:"แอปนี้พัฒนาโดยผู้ใช้อิสระร่วมกับ Claude",vi:"Ứng dụng này được phát triển bởi một người dùng độc lập cùng với Claude.",id:"Aplikasi ini dikembangkan oleh pengguna independen bersama Claude.",la:"Hanc applicationem independens usor cum Claude evolvit."};
+for(const k in Q2)Q[k][1]=Q2[k];
+const MAX=50,$=s=>document.querySelector(s),R=document.documentElement;
+const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch{return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}};
+let lang=ld("lang",null),theme=ld("theme","dark"),hist=ld("hist",[]),ex="",sub="",just=0,err=0,sci=!!ld("sci",false),deg=ld("deg",true)!==false,cpm=ld("cpm",0),us=[];
+if(!L[lang]){const n=(navigator.language||"en").slice(0,2).toLowerCase();lang=L[n]?n:(n=="no"||n=="nn")?"nb":"en"}
+if(!TH.some(x=>x[0]==theme))theme="dark";if(![0,1,2].includes(cpm))cpm=0;
+if(!Array.isArray(hist))hist=[];
+const t=i=>i==8?W[lang]:i>19?Q[lang][i-20]:i>16?Z[lang][i-17]:i>15?Y[lang]:i>8?X[lang][i-9]:L[lang][i];
+async function cp(s){try{await navigator.clipboard.writeText(s);return 1}catch{try{const a=document.createElement("textarea");a.value=s;a.style.cssText="position:fixed;opacity:0";document.body.appendChild(a);a.select();const ok=document.execCommand("copy");a.remove();return ok}catch{return 0}}}
+function pop(c){const e=$("#ex");e.classList.remove("pz","sk");void e.offsetWidth;e.classList.add(c)}
+let tm;function toast(i=8){const e=$("#tt");e.textContent=t(i);e.classList.add("o");clearTimeout(tm);tm=setTimeout(()=>e.classList.remove("o"),1800)}
+const D=c=>c>="0"&&c<="9",O=c=>c!=""&&"+−×÷^".includes(c),V=c=>D(c)||(c!=""&&")%.π!e".includes(c));
+
+function fmt(v){v=+v.toPrecision(12);if(Object.is(v,-0))v=0;const r=String(v);return r[0]=="-"?"−"+r.slice(1):r}
+function ev(s){
+  s=s.replace(/(?:(?:sin|cos|tan|ln|log|abs|√)?[+−×÷^(])+$/,"");if(!s)return"";
+  s+=")".repeat(Math.max(0,(s.match(/\(/g)||[]).length-(s.match(/\)/g)||[]).length));
+  let i=0;
+  const E=()=>{let v=T();while(s[i]=="+"||s[i]=="−"){const c=s[i++],r=T();v=c=="+"?v+r:v-r}return v};
+  const T=()=>{let v=F();while(s[i]=="×"||s[i]=="÷"){const c=s[i++],r=F();v=c=="×"?v*r:v/r}return v};
+  const fa=n=>{if(n<0||n%1||n>170)throw 0;let r=1;for(let k=2;k<=n;k++)r*=k;return r};
+  const fn=(n,x)=>{const a=deg?x*Math.PI/180:x,z=y=>Math.abs(y)<1e-15?0:y;switch(n){case"sin":return z(Math.sin(a));case"cos":return z(Math.cos(a));case"tan":if(deg&&((x%180)+180)%180==90)throw 0;return z(Math.tan(a));case"ln":if(x<=0)throw 0;return Math.log(x);case"log":if(x<=0)throw 0;return Math.log10(x);case"√":if(x<0)throw 0;return Math.sqrt(x);default:return Math.abs(x)}};
+  const Q=()=>{let v=P();while(s[i]=="%"||s[i]=="!"){v=s[i++]=="%"?v/100:fa(v)}return v};
+  const F=()=>{if(s[i]=="−"){i++;return -F()}const v=Q();if(s[i]=="^"){i++;return v**F()}return v};
+  const P=()=>{
+    if(s[i]=="("){i++;const v=E();if(s[i++]!=")")throw 0;return v}
+    if(s[i]=="π"){i++;return Math.PI}
+    if(s[i]=="e"){i++;return Math.E}
+    const f=/^(sin|cos|tan|ln|log|abs|√)\(/.exec(s.slice(i));
+    if(f){i+=f[0].length;const v=E();if(s[i++]!=")")throw 0;return fn(f[1],v)}
+    const m=/^(\d+\.?\d*|\.\d+)(e[+-]?\d+)?/.exec(s.slice(i));if(!m)throw 0;i+=m[0].length;return +m[0]
+  };
+  try{const v=E();return i<s.length||!isFinite(v)?null:fmt(v)}catch{return null}
+}
+
+function fit(el,n,base){el.style.fontSize=(n<=12?base:n<=20?base*.78:n<=30?base*.6:base*.5)+"px"}
+function draw(){
+  const e=$("#ex"),shown=err?t(7):fd(ex||"0",1);
+  e.textContent=shown;fit(e,shown.length,Math.min(56,innerWidth/8));
+  let s=sub;
+  if(err)s="";else if(!just&&ex){const r=ev(ex);if(r&&r!==ex)s=r}
+  $("#rs").textContent=fd(s,1);
+}
+
+function fd(s,g){return s.replace(/(\d+)(\.\d*)?/g,(m,a,b)=>(g?a.replace(/\B(?=(\d{3})+(?!\d))/g,","):a)+(b||""))}
+function key(k){const a=[ex,sub,just,err];key0(k);if(a[0]!=ex||a[1]!=sub||a[2]!=just||a[3]!=err){us.push(a);if(us.length>100)us.shift()}sU()}
+function sU(){$("#ub").disabled=!us.length}
+function undo(){const a=us.pop();if(!a)return;if(just&&!a[2]&&hist[0]&&sub==hist[0].e+" ="){hist.shift();sv("hist",hist)}ex=a[0];sub=a[1];just=a[2];err=a[3];draw();sU()}
+function key0(k){
+  if(err){ex="";sub="";err=0}
+  if(k=="DEG"){deg=!deg;sv("deg",deg);syncDeg();return draw()}
+  if(k=="AC"){ex="";sub="";just=0;return draw()}
+  if(k=="DEL"){if(just){ex="";sub=""}else ex=ex.slice(0,-1);just=0;return draw()}
+  if(k=="="){
+    if(!ex)return;const r=ev(ex);
+    if(r===""||r===ex)return;
+    if(r===null){err=1;just=0;draw();return pop("sk")}
+    hist.unshift({e:ex,r});hist.length=Math.min(hist.length,50);sv("hist",hist);
+    
+    sub=ex+" =";ex=r;just=1;draw();return pop("pz");
+  }
+  if(just){if(!(O(k)||k=="%"||k=="!"))ex="";just=0;sub=""}
+  const l=ex.slice(-1),open=(ex.match(/\(/g)||[]).length-(ex.match(/\)/g)||[]).length,seg=ex.match(/[\d.]*$/)[0];
+  let c=k;
+  if(k=="()")k=c=open>0&&V(l)?")":"(";
+  if(k=="(")c=V(l)?"×(":"(";
+  else if(k.length>1&&k.slice(-1)=="(")c=(V(l)?"×":"")+k;
+  else if(k=="π"||k=="e")c=(V(l)?"×":"")+k;
+  else if(k==")"){if(open<=0||!V(l))return}
+  else if(k=="%"||k=="!"){if(!V(l))return}
+  else if(k=="."){if(seg.includes("."))return;c=(l&&")%π!e".includes(l))?"×0.":seg==""?"0.":"."}
+  else if(D(k)){if(l&&")%π!e".includes(l))c="×"+k;else if(seg=="0")ex=ex.slice(0,-1)}
+  else if(O(k)){
+    if(ex==""||l=="("){if(k!="−")return}
+    else if(O(l)){if(ex.length==1||ex.slice(-2,-1)=="(")return;ex=ex.slice(0,-1)}
+  }
+  if(ex.length+c.length>MAX){toast();return draw()}
+  ex+=c;draw();
+}
+
+document.querySelectorAll("#pad,#sc").forEach(p=>p.addEventListener("click",e=>{const b=e.target.closest("button");if(b)key(b.dataset.k)}));
+addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key=="z"&&!/^(SELECT|INPUT)$/.test(e.target.tagName)){e.preventDefault();return undo()}
+  if(/^(SELECT|INPUT)$/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;
+  const m={"*":"×",x:"×","/":"÷","-":"−",",":".",Enter:"=","=":"=",Backspace:"DEL",Escape:"AC"};
+  const k=m[e.key]||e.key;
+  if(/^[0-9.+−×÷%()=^!]$/.test(k)||k=="DEL"||k=="AC"){e.preventDefault();key(k=="("||k==")"?k:k)}
+});
+
+// panels
+function closeAll(){document.querySelectorAll(".pn").forEach(x=>x.classList.remove("o"));$("#ll").classList.remove("o");$("#v1").hidden=false;$("#v2").hidden=true;$("#v3").hidden=true;$("#v4").hidden=true}
+document.querySelectorAll(".ib").forEach(b=>b.onclick=()=>{
+  const p=$(b.dataset.p),o=p.classList.contains("o");closeAll();
+  if(!o){p.classList.add("o");if(p.id=="hp")rh()}
+});
+addEventListener("click",e=>{if(!e.target.closest(".pn,.ib"))closeAll()});
+
+function rh(){
+  const h=$("#hl");h.textContent="";
+  $("#hc").style.display=hist.length?"":"none";
+  if(!hist.length){const d=document.createElement("div");d.className="em";d.textContent=t(5);h.appendChild(d);return}
+  hist.forEach(x=>{
+    const b=document.createElement("button");b.className="hi";
+    const s=document.createElement("small"),v=document.createElement("b");
+    s.textContent=fd(x.e+" =",1);v.textContent=fd(x.r,1);b.append(s,v);
+    b.onclick=()=>{us.push([ex,sub,just,err]);ex=x.r;sub="";just=0;err=0;closeAll();draw();sU()};
+    h.appendChild(b);
+  });
+}
+$("#hc").onclick=()=>{hist=[];sv("hist",hist);rh()};
+
+// settings
+const fl=k=>`<svg class="fl" viewBox="0 0 30 20">${FL[k]}</svg>`,ll=$("#ll"),lb=$("#lb");
+Object.keys(L).forEach(k=>{const b=document.createElement("button");b.dataset.l=k;b.innerHTML=fl(k)+"<span></span>";b.lastChild.textContent=L[k][0];b.onclick=()=>{lang=k;sv("lang",k);ll.classList.remove("o");applyLang()};ll.appendChild(b)});
+lb.onclick=()=>ll.classList.toggle("o");
+TH.forEach(([n,bg,ac],i)=>{
+  const b=document.createElement("button");b.dataset.t=n;b.style.animationDelay=i*14+"ms";b.setAttribute("aria-label",n);
+  b.style.background=`linear-gradient(135deg,${bg} 50%,${ac} 50%)`;
+  b.onclick=()=>{theme=n;sv("theme",n);applyTheme()};
+  $("#sw").appendChild(b);
+});
+
+
+
+
+
+
+
+function applyTheme(){R.dataset.theme=theme;document.querySelectorAll("#sw button").forEach(b=>b.classList.toggle("s",b.dataset.t==theme))}
+function applyLang(){
+  R.lang=lang;
+  lb.innerHTML=fl(lang)+"<span></span><svg class=\"i\" viewBox=\"0 0 24 24\"><path d=\"M6 9l6 6 6-6\"/></svg>";lb.querySelector("span").textContent=L[lang][0];
+  ll.querySelectorAll("button").forEach(b=>b.classList.toggle("s",b.dataset.l==lang));
+  document.querySelectorAll("[data-a]").forEach(n=>n.setAttribute("aria-label",t(+n.dataset.a)));
+  document.querySelectorAll("[data-i]").forEach(n=>n.textContent=t(+n.dataset.i));
+  rh();draw();
+}
+addEventListener("resize",draw);
+const SC=[["sin","sin("],["cos","cos("],["tan","tan("],["ln","ln("],["log","log("],["√","√("],["abs","abs("],["^","^"],["!","!"],["π","π"],["e","e"],["DEG","DEG"]];
+SC.forEach(([l,k])=>{const b=document.createElement("button");b.textContent=l;b.dataset.k=k;if(k=="DEG")b.id="dg";$("#sc").appendChild(b)});
+const tg=$("#tg"),v1=$("#v1"),v2=$("#v2");
+function syncSci(){$("#app").classList.toggle("sci",sci);tg.setAttribute("aria-checked",sci)}
+function syncDeg(){$("#dg").textContent=deg?"DEG":"RAD"}
+function syncCp(){$("#cpb").hidden=!cpm;document.querySelectorAll("#sg button").forEach(b=>b.classList.toggle("s",+b.dataset.v==cpm))}
+$("#cpb").onclick=()=>{if(err||!ex)return;const r=just?ex:ev(ex);if(!r)return;const e=(just?sub.replace(/ =$/,""):ex).replace(/[+−×÷^(]+$/,"");cp(fd(cpm==2&&e&&e!==r?e+" = "+r:r.replace("−","-"),0)).then(ok=>ok&&toast(14))};
+function syncFmt(){draw();rh()}
+$("#mc").onclick=()=>cp("ibm.sm97@gmail.com").then(ok=>ok&&toast(14));
+$("#ab").onclick=()=>{v2.hidden=true;$("#v3").hidden=false};
+$("#bk3").onclick=()=>{$("#v3").hidden=true;v2.hidden=false};
+
+$("#ub").onclick=undo;
+tg.onclick=()=>{sci=!sci;sv("sci",sci);syncSci()};
+$("#sg").onclick=e=>{const b=e.target.closest("button");if(!b)return;cpm=+b.dataset.v;sv("cpm",cpm);syncCp()};
+$("#mb").onclick=()=>{v1.hidden=true;v2.hidden=false};$("#bkb").onclick=()=>{v2.hidden=true;v1.hidden=false};
+const v4=$("#v4");$("#tb").onclick=()=>{v1.hidden=true;v4.hidden=false};$("#bk4").onclick=()=>{v4.hidden=true;v1.hidden=false};
+applyTheme();applyLang();syncSci();syncDeg();syncCp();syncFmt();sU();
+document.querySelectorAll(".pad button").forEach((b,i)=>b.style.animationDelay=i*18+"ms");
+</script>
+</body>
+</html>
