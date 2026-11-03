@@ -1,5 +1,5 @@
 # Calcly
-Simple and easy calculator that i made just for fun :P
+Simple and easy calculator that i made with Claude just for fun :P
 ![Logo](https://i.imgur.com/y2Cm60j.png)
 ![Screenshot 1](https://i.imgur.com/F85fTib.jpeg)
 ![Screenshot2](https://i.imgur.com/PR6Skbk.jpeg)
