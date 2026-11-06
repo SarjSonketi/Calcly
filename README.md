@@ -1,17 +1,33 @@
+<div align="center">
+  
 # Calcly
-For 1.1.0
-- Percentage measurement option has been added.
-- Themes have been updated; 20 dark and 20 light themes have been added, along with custom colour options for number sets.
-- Keypress sound options have been added: Drom, Keyboard, Classic or Off.
-- Translations have been optimised.
 
-- Logo;
-- ![logo](https://i.imgur.com/gC3hN1g.png)
+**Sleek. Simple. Smart.**
 
-- Screenshots;
-- ![Screenshot 1](https://i.imgur.com/IGybAtP.jpeg)
-- ![Screenshot 2](https://i.imgur.com/1FGyWJd.jpeg)
-- ![Screenshot 3](https://i.imgur.com/wQUayx3.jpeg)
-- ![Screenshot 4](https://i.imgur.com/KXPbjeX.jpeg)
-- ![Screenshot 5](https://i.imgur.com/CZ0SQdn.jpeg)
-- ![Screenshot 6](https://i.imgur.com/d6DxsaC.jpeg)
+![Release](https://img.shields.io/badge/Release-2.0.0-4b9aff?style=flat-square)
+![Languages](https://img.shields.io/badge/Languages-31-8b92a1?style=flat-square)
+![Offline](https://img.shields.io/badge/100%25%20Offline-%E2%9C%93-8b92a1?style=flat-square)
+
+</div>
+
+---
+
+## ✨ What's New in 2.0.0
+
+| | |
+|:---:|:---|
+| 🔊 | **7 new sound effects** with new options for where they play — *Keys* only or *All* interactions. |
+| 🧩 | **Add-ons menu added.** A brand new home for Calcly's growing toolbox. |
+
+### 🧩 Add-ons
+
+| | |
+|:---:|:---|
+| ➗ | **Percentage Calculator**<br><sub>quick and clean percent math</sub> |
+| 🥧 | **Pie Chart**<br><sub>3D, round and ring styles — export as PNG</sub> |
+| 🔄 | **Converter**<br><sub>7 unit conversions + 🧍 Body Mass Index</sub> |
+| 🕒 | **Date Calculation**<br><sub>date differences and time math</sub> |
+
+### 🔧 Fixes & Polish
+
+Various software, visual and language translation errors have been fixed.
