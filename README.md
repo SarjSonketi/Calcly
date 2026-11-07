@@ -18,7 +18,6 @@
 |:---:|:---|
 | 🌍 | **New Languages & RTL Support.** Added 🇦🇿Azerbaijani (az), 🇰🇿Kazakh (kk), 🇺🇿Uzbek (uz), 🇰🇬Kyrgyz (ky), 🇹🇷Uyghur (ug), 🌍Afrikaans (af), 🇮🇪Irish (ga), 🇵🇰Urdu (ur), 🇧🇩Bengali (bn), 🇮🇳Telugu (te), 🇮🇳Marathi (mr), 🇸🇦Arabic (ar). Also added RTL for required alphabets. |
 | 🥧 | **Pie Chart Page Enhancements.** Visual and functional improvements made directly to the pie chart module. |
-| 🖌️ | **The SVG icons of the unsightly flags have been changed.** SVG icons for countries like Azerbaijan and Kazakhstan have been updated. |
 | 📑 | **Added Constants Library to Add-ons** You can copy Pi, Euler number, Golden ratio,Apéry's Constant and Euler-mascheroni Constant up to 200-digit. |
 | ⏱️ | **Pressure gauger added to the Add-ons.** Now you can convert 10 different pressure units. |
 | 📜 | **Code Optimization.** The code has been reviewed as thoroughly as possible to identify any errors and omissions present in the previous version, and improvements have been made |
