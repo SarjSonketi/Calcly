@@ -4,30 +4,24 @@
 
 **Sleek. Simple. Smart.**
 
-![Release](https://img.shields.io/badge/Release-2.0.0-4b9aff?style=flat-square)
-![Languages](https://img.shields.io/badge/Languages-31-8b92a1?style=flat-square)
+![Release](https://img.shields.io/badge/Release-2.1.0-4b9aff?style=flat-square)
+![Languages](https://img.shields.io/badge/Languages-43-8b92a1?style=flat-square)
 ![Offline](https://img.shields.io/badge/100%25%20Offline-%E2%9C%93-8b92a1?style=flat-square)
 
 </div>
 
 ---
 
-## ✨ What's New in 2.0.0
+## ✨ What's New in 2.1.0
 
 | | |
 |:---:|:---|
-| 🔊 | **7 new sound effects** with new options for where they play — *Keys* only or *All* interactions. |
-| 🧩 | **Add-ons menu added.** A brand new home for Calcly's growing toolbox. |
+| 🌍 | **New Languages & RTL Support.** Added 🇦🇿Azerbaijani (az), 🇰🇿Kazakh (kk), 🇺🇿Uzbek (uz), 🇰🇬Kyrgyz (ky), 🇹🇷Uyghur (ug), 🌍Afrikaans (af), 🇮🇪Irish (ga), 🇵🇰Urdu (ur), 🇧🇩Bengali (bn), 🇮🇳Telugu (te), 🇮🇳Marathi (mr), 🇸🇦Arabic (ar). Also added RTL for required alphabets. |
+| 🥧 | **Pie Chart Page Enhancements.** Visual and functional improvements made directly to the pie chart module. |
+| 🖌️ | **The SVG icons of the unsightly flags have been changed.** SVG icons for countries like Azerbaijan and Kazakhstan have been updated. |
+| 📑 | **Added Constants Library to Add-ons** You can copy Pi, Euler number, Golden ratio,Apéry's Constant and Euler-mascheroni Constant up to 200-digit. |
+| ⏱️ | **Pressure gauger added to the Add-ons.** Now you can convert 10 different pressure units. |
+| 📜 | **Code Optimization.** The code has been reviewed as thoroughly as possible to identify any errors and omissions present in the previous version, and improvements have been made |
 
-### 🧩 Add-ons
-
-| | |
-|:---:|:---|
-| ➗ | **Percentage Calculator**<br><sub>quick and clean percent math</sub> |
-| 🥧 | **Pie Chart**<br><sub>3D, round and ring styles — export as PNG</sub> |
-| 🔄 | **Converter**<br><sub>7 unit conversions + 🧍 Body Mass Index</sub> |
-| 🕒 | **Date Calculation**<br><sub>date differences and time math</sub> |
-
-### 🔧 Fixes & Polish
-
-Various software, visual and language translation errors have been fixed.
+That's all have a nice day✌️🙏
+---
